@@ -13,6 +13,8 @@ private:
 	string name;
 	map<int, float> delayByHour;
 	float totalDelay;
+	float numFlights;
+	map<int, float> flightsPerHour;
 
 public:
 	Airport(string name);
@@ -22,4 +24,6 @@ public:
 	string getName();
 	float getTotalDelay();
 	float getDelayByHour(int hour);
+	void addFlight(int hour);
+	float getNumFlights();
 };
