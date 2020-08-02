@@ -31,4 +31,5 @@ public:
 	float delay();
 	bool hasDelay();
 	bool early();
+	static vector<Flight*> readFlights();
 };
