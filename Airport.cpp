@@ -5,15 +5,23 @@ Airport::Airport(string name) {
 	this->name = name;
 	for (int i = 0; i < 24; i++) {
 		this->delayByHour[i] = 0;
+		this->flightsPerHour[i] = 0;
 	}
 	this->totalDelay = 0;
+	this->numFlights = 0;
 }
 
 string Airport::getName() {
 	return this->name;
 }
 
+void Airport::addFlight(int hour) {
+	this->numFlights++;
+	this->flightsPerHour[hour]++;
+}
+
 vector<Airport*> Airport::compileO(vector<Flight*> flights) {
+	cout << "LOADING AIRPORT DATA" << endl;
 	vector<Airport*> toReturn;
 	for (Flight* i : flights) {
 		string flightD = i->origin();
@@ -29,15 +37,19 @@ vector<Airport*> Airport::compileO(vector<Flight*> flights) {
 		if (!found) {
 			Airport* toAdd = new Airport(flightD);
 			toAdd->addDelay(i->delay(), i->hour());
+			toAdd->addFlight(i->hour());
 			toReturn.push_back(toAdd);
 		} else {
 			toReturn[index]->addDelay(i->delay(), i->hour());
+			toReturn[index]->addFlight(i->hour());
 		}
 	}
+	cout << "AIRPORT DATA LOADED" << endl;
 	return toReturn;
 }
 
 vector<Airport*> Airport::compileD(vector<Flight*> flights) {
+	cout << "LOADING AIRPORT DATA" << endl;
 	vector<Airport*> toReturn;
 	for (Flight* i : flights) {
 		string flightD = i->destination();
@@ -53,11 +65,14 @@ vector<Airport*> Airport::compileD(vector<Flight*> flights) {
 		if (!found) {
 			Airport* toAdd = new Airport(flightD);
 			toAdd->addDelay(i->delay(), i->hour());
+			toAdd->addFlight(i->hour());
 			toReturn.push_back(toAdd);
 		} else {
 			toReturn[index]->addDelay(i->delay(), i->hour());
+			toReturn[index]->addFlight(i->hour());
 		}
 	}
+	cout << "AIRPORT DATA LOADED" << endl;
 	return toReturn;
 }
 
@@ -77,6 +92,8 @@ float Airport::getDelayByHour(int hour) {
 		return this->delayByHour[hour];
 	}
 }
+
+
 
 
 
