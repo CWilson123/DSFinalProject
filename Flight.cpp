@@ -82,14 +82,14 @@ vector<Flight*> Flight::readFlights() {
 	vector<Flight*> flights;
 	int count = 0;
 
-	ifstream file("shortened.csv");
+	ifstream file("fixedshortened.csv");
 	getline(file, header);
 	cout << "READING IN FILE" << endl;
 	cout << endl;
 	while (file.good()) {
 		count++;
-		if (count % 45831 == 0) {
-			cout << count << "/458311 Lines Read" << endl;
+		if (count % 2000 == 0) {
+			cout << count << "/200912 Lines Read" << endl;
 		}
 		getline(file, index, ',');
 		getline(file, airline, ',');
@@ -105,7 +105,7 @@ vector<Flight*> Flight::readFlights() {
 		Flight* toAdd = new Flight(airline, day, origin, destination, hour, delay, hasDelay, early);
 		flights.push_back(toAdd);
 
-		if (index == "469967") {
+		if (count == 200912) {
 			break;
 		}
 	}
@@ -113,6 +113,8 @@ vector<Flight*> Flight::readFlights() {
 	cout << "FILE LOADED" << endl;
 	return flights;
 }
+
+
 
 
 

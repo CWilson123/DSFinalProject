@@ -99,5 +99,3 @@ float Airport::getDelayByHour(int hour) {
 
 
 
-
-

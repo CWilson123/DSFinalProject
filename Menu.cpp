@@ -6,6 +6,8 @@
 #include "Flight.h"
 #include "Airport.h"
 #include "AirportHeap.h"
+#include "AirportTreeNode.h"
+#include "AirportBST.h"
 
 using namespace std;
 
@@ -16,107 +18,235 @@ int main() {
 	int selection;
 
 	cout << endl;
-	cout << "WOULD YOU LIKE TO LOOK AT AIRPORT DATA OR AIRLINE DATA?" << endl;
-	cout << "[1] AIRPORT DATA" << endl;
-	cout << "[2] AIRLINE DATA" << endl;
-	cout << "[3] EXIT" << endl;
+	cout << "WOULD YOU LIKE TO STORE DATA IN A HEAP OR A BST?" << endl;
+	cout << "[1] HEAP" << endl;
+	cout << "[2] BST" << endl;
 	cin >> selection;
 
-
-//DALLAS WORKING ON MENU FOR AIRPORT DATA
-
-
+	//SELECTION IS HEAP
 	if (selection == 1) {
-		int totalByHour;
-		cout << endl;
-		cout << "WOULD YOU LIKE TO LOOK AT AIRPORT DATA IN TOTAL OR BY HOUR?" << endl;
-		cout << "[1] TOTAL" << endl;
-		cout << "[2] BY HOUR" << endl;
-		cin >> totalByHour;
-		cout << endl;
+		int airportOrAirline;
+		cout << "WOULD YOU LIKE TO LOOK AT DATA BY AIRPORT OR BY AIRLINE?" << endl;
+		cout << "[1] AIRPORT" << endl;
+		cout << "[2] AIRLINE" << endl;
+		cin >> airportOrAirline;
 
-		if (totalByHour == 1) {
-			int heapOrTree;
-			cout << endl;
-			cout << "WOULD YOU LIKE TO STORE THE DATA IN A HEAP OR BST?" << endl;
-			cout << "[1] HEAP" << endl;
-			cout << "[2] BST" << endl;
-			cin >> heapOrTree;
+		//SELECTION IS AIRPORT
+		if (airportOrAirline == 1) {
+			int OorD;
+			cout << "WOULD YOU LIKE TO LOOK AT ORIGIN AIRPORTS OR DESTINATION AIRPORTS?" << endl;
+			cout << "[1] ORIGIN" << endl;
+			cout << "[2] DESTINATION" << endl;
+			cin >> OorD;
 
-			if (heapOrTree == 1) {
-				int OorD;
-				cout << endl;
-				cout << "WOULD YOU LIKE TO LOOK AT ORIGIN DELAYS OR DESTINATION DELAYS?" << endl;
-				cout << "[1] ORIGIN DELAYS" << endl;
-				cout << "[2] DESTINATION DELAYS" << endl;
-				cin >> OorD;
+			//HEAP, AIRPORT, ORIGIN
+			if (OorD == 1) {
+				int totalOrHour;
+				cout << "WOULD YOU LIKE TO LOOK AT TOTAL DELAYS OR DELAYS BY HOUR?" << endl;
+				cout << "[1] TOTAL DELAYS" << endl;
+				cout << "[2] DELAYS BY HOUR" << endl;
+				cin >> totalOrHour;
 
-				if (OorD == 1) {
+				//HEAP, AIRPORT, ORIGIN, TOTAL
+				if (totalOrHour == 1) {
+					vector<Airport*> a = Airport::compileO(flights);
 					AirportHeap h;
-					vector<Airport*> origins = Airport::compileO(flights);
-					for (Airport* i : origins) {
+					for (Airport* i : a) {
 						h.push(i);
 					}
-					int toSee;
-					cout << "PLEASE ENTER HOW MANY AIRPORTS YOU WOULD LIKE TO SEE (1 - 312)" << endl;
-					cin >> toSee;
 
-					for (int i = 0; i < toSee; i++) {
-						cout << "THE NUMBER " << i + 1 << " AIRPORT IS " << h.heap[0]->getName();
-						cout << " WITH " << h.heap[0]->getTotalDelay() << " MINUTES OF DELAY" << endl;
-						cout << endl;
+					int numAirports;
+					cout << "HOW MANY OF THE BEST AIRPORTS (1 - 312) WOULD YOU LIKE TO SEE?" << endl;
+					cin >> numAirports;
+
+					for (int i = 0; i < numAirports; i++) {
+						cout << "THE NUMBER " << i + 1 << " AIRPORT IS " << h.top()->getName() << " WITH " << h.top()->getTotalDelay() << " MINUTES OF DELAY" << endl;
 						h.pop();
 					}
-				}
-			}
+				//HEAP, AIRPORT, ORIGIN, HOUR
+				} else if (totalOrHour == 2) {
+					int hour;
 
-		} else if (totalByHour == 2) {
-			int hour;
-			cout << "PLEASE ENTER THE HOUR YOU WOULD LIKE TO SEARCH (0 - 23)" << endl;
-			cin >> hour;
-			cout << endl;
+					cout << "WHAT HOUR (0 - 23) WOULD YOU LIKE TO LOOK AT?" << endl;
+					cin >> hour;
 
-			int heapOrTree;
-			cout << "WOULD YOU LIKE TO STORE THE DATA IN A HEAP OR BST?" << endl;
-			cout << "[1] HEAP" << endl;
-			cout << "[2] BST" << endl;
-			cin >> heapOrTree;
+					int numAirports;
+					cout << "HOW MANY OF THE BEST AIRPORTS (1 - 312) WOULD YOU LIKE TO SEE?" << endl;
+					cin >> numAirports;
 
-			if (heapOrTree == 1) {
-				int OorD;
-				cout << endl;
-				cout << "WOULD YOU LIKE TO LOOK AT ORIGIN DELAYS OR DESTINATION DELAYS?" << endl;
-				cout << "[1] ORIGIN DELAYS" << endl;
-				cout << "[2] DESTINATION DELAYS" << endl;
-				cin >> OorD;
 
-				if (OorD == 1) {
+
+					vector<Airport*> a = Airport::compileO(flights);
 					AirportHeap h;
-					vector<Airport*> origins = Airport::compileO(flights);
-					for (Airport* i : origins) {
+					for (Airport* i : a) {
 						h.push(i, hour);
 					}
-					int toSee;
-					cout << "PLEASE ENTER HOW MANY AIRPORTS YOU WOULD LIKE TO SEE (1 - 312)" << endl;
-					cin >> toSee;
-
-					for (int i = 0; i < toSee; i++) {
-						cout << "THE NUMBER " << i + 1 << " AIRPORT FOR HOUR " << hour << " IS " << h.heap[0]->getName();
-						cout << " WITH " << h.heap[0]->getTotalDelay() << " MINUTES OF DELAY" << endl;
-						cout << endl;
+					for (int i = 0; i < numAirports; i++) {
+						cout << "THE NUMBER " << i + 1 << " AIRPORT FOR HOUR " << hour << " IS " << h.top()->getName() << " WITH " << h.top()->getDelayByHour(hour) << " MINUTES OF DELAY" << endl;
 						h.pop(hour);
 					}
 				}
+			} else {
+
+				int totalOrHour;
+				cout << "WOULD YOU LIKE TO LOOK AT TOTAL DELAYS OR DELAYS BY HOUR?" << endl;
+				cout << "[1] TOTAL DELAYS" << endl;
+				cout << "[2] DELAYS BY HOUR" << endl;
+				cin >> totalOrHour;
+
+				//HEAP, AIRPORT, ORIGIN, TOTAL
+				if (totalOrHour == 1) {
+					vector<Airport*> a = Airport::compileD(flights);
+					AirportHeap h;
+					for (Airport* i : a) {
+						h.push(i);
+					}
+
+					int numAirports;
+					cout << "HOW MANY OF THE BEST AIRPORTS (1 - 312) WOULD YOU LIKE TO SEE?" << endl;
+					cin >> numAirports;
+
+					for (int i = 0; i < numAirports; i++) {
+						cout << "THE NUMBER " << i + 1 << " AIRPORT IS " << h.top()->getName() << " WITH " << h.top()->getTotalDelay() << " MINUTES OF DELAY" << endl;
+						h.pop();
+					}
+				//HEAP, AIRPORT, ORIGIN, HOUR
+				} else if (totalOrHour == 2) {
+					int hour;
+
+					cout << "WHAT HOUR (0 - 23) WOULD YOU LIKE TO LOOK AT?" << endl;
+					cin >> hour;
+
+					int numAirports;
+					cout << "HOW MANY OF THE BEST AIRPORTS (1 - 312) WOULD YOU LIKE TO SEE?" << endl;
+					cin >> numAirports;
+
+
+
+					vector<Airport*> a = Airport::compileD(flights);
+					AirportHeap h;
+					for (Airport* i : a) {
+						h.push(i, hour);
+					}
+					for (int i = 0; i < numAirports; i++) {
+						cout << "THE NUMBER " << i + 1 << " AIRPORT FOR HOUR " << hour << " IS " << h.top()->getName() << " WITH " << h.top()->getDelayByHour(hour) << " MINUTES OF DELAY" << endl;
+						h.pop(hour);
+					}
+				}	
+
 			}
-
 		}
-
-
-//END DALLAS WORKING ON AIRPORT DATA
-
-
+	//SELECTION IS BST
 	} else if (selection == 2) {
+		int airportOrAirline;
+		cout << "WOULD YOU LIKE TO LOOK AT DATA BY AIRPORT OR BY AIRLINE?" << endl;
+		cout << "[1] AIRPORT" << endl;
+		cout << "[2] AIRLINE" << endl;
+		cin >> airportOrAirline;
 
+		//BST, AIRPORT
+		if (airportOrAirline == 1) {
+			int OorD;
+			cout << "WOULD YOU LIKE TO LOOK AT ORIGIN AIRPORTS OR DESTINATION AIRPORTS?" << endl;
+			cout << "[1] ORIGIN" << endl;
+			cout << "[2] DESTINATION" << endl;
+			cin >> OorD;
+
+			//BST, AIRPORT, ORIGIN
+			if (OorD == 1) {
+				int totalOrHour;
+				cout << "WOULD YOU LIKE TO LOOK AT TOTAL DELAYS OR DELAYS BY HOUR?" << endl;
+				cout << "[1] TOTAL DELAYS" << endl;
+				cout << "[2] DELAYS BY HOUR" << endl;
+				cin >> totalOrHour;
+
+				//BST, AIRPORT, ORIGIN, TOTAL
+				if (totalOrHour == 1) {
+					vector<Airport*> a = Airport::compileO(flights);
+					AirportBST bst;
+					for (Airport* i : a) {
+						bst.insert(bst.root, i);
+					}
+					bst.inorder(bst.root, bst.ordered);
+					int numAirports;
+					cout << "HOW MANY OF THE BEST AIRPORTS (1 - 312) WOULD YOU LIKE TO SEE?" << endl;
+					cin >> numAirports;
+
+					for (int i = 0; i < numAirports; i++) {
+						cout << "THE NUMBER " << i + 1 << " AIRPORT IS " << bst.ordered[i]->getName() << " WITH " << bst.ordered[i]->getTotalDelay() << " MINUTES OF DELAY" << endl;
+					}
+				//BST, AIRPORT, ORIGIN, HOUR
+				} else if (totalOrHour == 2) {
+					int hour;
+
+					cout << "WHAT HOUR (0 - 23) WOULD YOU LIKE TO LOOK AT?" << endl;
+					cin >> hour;
+
+					int numAirports;
+					cout << "HOW MANY OF THE BEST AIRPORTS (1 - 312) WOULD YOU LIKE TO SEE?" << endl;
+					cin >> numAirports;
+
+
+
+					vector<Airport*> a = Airport::compileO(flights);
+					AirportBST bst;
+					for (Airport* i : a) {
+						bst.insert(bst.root, i, hour);
+					}
+					bst.inorder(bst.root, bst.ordered);
+					cout << bst.ordered.size() << endl;
+					for (int i = 0; i < numAirports; i++) {
+						cout << "THE NUMBER " << i + 1 << " AIRPORT FOR HOUR " << hour << " IS " << bst.ordered[i]->getName() << " WITH " << bst.ordered[i]->getDelayByHour(hour) << " MINUTES OF DELAY" << endl;
+					}
+				}
+			//BST, AIRPORT, DESTINATION
+			} else if (OorD == 2) {
+				int totalOrHour;
+				cout << "WOULD YOU LIKE TO LOOK AT TOTAL DELAYS OR DELAYS BY HOUR?" << endl;
+				cout << "[1] TOTAL DELAYS" << endl;
+				cout << "[2] DELAYS BY HOUR" << endl;
+				cin >> totalOrHour;
+
+				//BST, AIRPORT, DESTINATION, TOTAL
+				if (totalOrHour == 1) {
+					vector<Airport*> a = Airport::compileD(flights);
+					AirportBST bst;
+					for (Airport* i : a) {
+						bst.insert(bst.root, i);
+					}
+					bst.inorder(bst.root, bst.ordered);
+					int numAirports;
+					cout << "HOW MANY OF THE BEST AIRPORTS (1 - 312) WOULD YOU LIKE TO SEE?" << endl;
+					cin >> numAirports;
+
+					for (int i = 0; i < numAirports; i++) {
+						cout << "THE NUMBER " << i + 1 << " AIRPORT IS " << bst.ordered[i]->getName() << " WITH " << bst.ordered[i]->getTotalDelay() << " MINUTES OF DELAY" << endl;
+					}
+				//HEAP, AIRPORT, DESTINATION, HOUR
+				} else if (totalOrHour == 2) {
+					int hour;
+
+					cout << "WHAT HOUR (0 - 23) WOULD YOU LIKE TO LOOK AT?" << endl;
+					cin >> hour;
+
+					int numAirports;
+					cout << "HOW MANY OF THE BEST AIRPORTS (1 - 312) WOULD YOU LIKE TO SEE?" << endl;
+					cin >> numAirports;
+
+
+
+					vector<Airport*> a = Airport::compileD(flights);
+					AirportBST bst;
+					for (Airport* i : a) {
+						bst.insert(bst.root, i, hour);
+					}
+					bst.inorder(bst.root, bst.ordered);
+					for (int i = 0; i < numAirports; i++) {
+						cout << "THE NUMBER " << i + 1 << " AIRPORT FOR HOUR " << hour << " IS " << bst.ordered[i]->getName() << " WITH " << bst.ordered[i]->getDelayByHour(hour) << " MINUTES OF DELAY" << endl;
+					}
+				}
+			}
+		}
 	}
 
 }
