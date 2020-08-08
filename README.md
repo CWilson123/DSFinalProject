@@ -1,3 +1,6 @@
+MAKE SURE TO UNZIP "fixedshortened.csv.zip"
+
+
 Windows instructions:
 
 1.In cmd (with MinGW installed) navigate to the directory
